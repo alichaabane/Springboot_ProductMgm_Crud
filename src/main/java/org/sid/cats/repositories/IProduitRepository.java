@@ -15,4 +15,5 @@ public interface IProduitRepository extends JpaRepository<Produit, Long> {
     public List<Produit> findByDesignation(String des);
     public Page<Produit> findByDesignation(String des, Pageable p);
 
+
 }
