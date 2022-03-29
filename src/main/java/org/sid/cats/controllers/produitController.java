@@ -1,5 +1,6 @@
 package org.sid.cats.controllers;
 
+import io.swagger.annotations.*;
 import org.sid.cats.repositories.IProduitRepository;
 import org.sid.cats.entites.Produit;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +12,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Api(value = "Product Management", description = "REST APIs related to Product Entity", tags = "Product Management")
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping(value = "/api/")
+
 public class produitController {
     private final IProduitRepository produitRepository;
 
@@ -22,12 +25,26 @@ public class produitController {
         this.produitRepository = produitRepository;
     }
 
+    @ApiOperation(value = "Save a product", response = Iterable.class, tags = "00 - Save Product")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success | OK"),
+            @ApiResponse(code = 401, message = "Not Authorized !"),
+            @ApiResponse(code = 403, message = "Forbidden !"),
+            @ApiResponse(code = 404, message = "Not Found !") ,
+            @ApiResponse(code = 500, message = "Internal Server Error !") })
     @PostMapping("save")
     public Produit saveProduit(@RequestBody Produit p) {
 
         return produitRepository.save(p);
     }
 
+    @ApiOperation(value = "Get all the products", response = Iterable.class, tags = "01 - Get all products")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success | OK"),
+            @ApiResponse(code = 401, message = "Not Authorized !"),
+            @ApiResponse(code = 403, message = "Forbidden !"),
+            @ApiResponse(code = 404, message = "Not Found !") ,
+            @ApiResponse(code = 500, message = "Internal Server Error !") })
     @GetMapping("all")
     public List<Produit> getProduit() {
         return produitRepository.findAll(sortByReferenceAsc());
@@ -37,6 +54,13 @@ public class produitController {
         return Sort.by("reference");
     }
 
+    @ApiOperation(value = "Get products sorted by designation and listed by pages", response = Iterable.class, tags = "02 - Get paginated products")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success | OK"),
+            @ApiResponse(code = 401, message = "Not Authorized !"),
+            @ApiResponse(code = 403, message = "Forbidden !"),
+            @ApiResponse(code = 404, message = "Not Found !") ,
+            @ApiResponse(code = 500, message = "Internal Server Error !") })
     @GetMapping("produits")
     public Page<Produit> getProduits(int page) {
         Sort sort = Sort.by("designation");
@@ -44,6 +68,13 @@ public class produitController {
         return produitRepository.findAll(pageable);
     }
 
+    @ApiOperation(value = "Get products by keyword", response = Iterable.class, tags = "03 - Get products by keyword")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success | OK"),
+            @ApiResponse(code = 401, message = "Not Authorized !"),
+            @ApiResponse(code = 403, message = "Forbidden !"),
+            @ApiResponse(code = 404, message = "Not Found !") ,
+            @ApiResponse(code = 500, message = "Internal Server Error !") })
     @GetMapping("produitsParMC")
     public Page<Produit> getProduits(String mc, int page) {
         // exple: http://localhost:3000/produitsParMC?mc=TV&page=0
@@ -55,6 +86,13 @@ public class produitController {
         return produitRepository.produitParMC("%" + mc + "%", pageable);
     }
 
+    @ApiOperation(value = "Get a product by reference", response = Iterable.class, tags = "04 - Get a product")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success | OK"),
+            @ApiResponse(code = 401, message = "Not Authorized !"),
+            @ApiResponse(code = 403, message = "Forbidden !"),
+            @ApiResponse(code = 404, message = "Not Found !") ,
+            @ApiResponse(code = 500, message = "Internal Server Error !") })
     @GetMapping("getProduit/{reference}")
     public Produit getProduit(@PathVariable("reference") long reference) {
         System.out.println(reference);
@@ -62,6 +100,13 @@ public class produitController {
         return produitRepository.findById(reference).orElse(null);
     }
 
+    @ApiOperation(value = "Delete a product", response = Iterable.class, tags = "05 - Delete a product")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success | OK"),
+            @ApiResponse(code = 401, message = "Not Authorized !"),
+            @ApiResponse(code = 403, message = "Forbidden !"),
+            @ApiResponse(code = 404, message = "Not Found !") ,
+            @ApiResponse(code = 500, message = "Internal Server Error !") })
     @DeleteMapping("delete")
     public boolean delete(@PathVariable("reference") long reference) {
         // exple: http://localhost:3000/delete?reference=1 => supprime le produit de reference (id) = 1
@@ -70,6 +115,14 @@ public class produitController {
         return true;
     }
 
+
+    @ApiOperation(value = "Update a product", response = Iterable.class, tags = "06 - Update a product")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success | OK"),
+            @ApiResponse(code = 401, message = "Not Authorized !"),
+            @ApiResponse(code = 403, message = "Forbidden !"),
+            @ApiResponse(code = 404, message = "Not Found !") ,
+            @ApiResponse(code = 500, message = "Internal Server Error !") })
     @PutMapping("update/{reference}")
     public Produit update(@PathVariable("reference") long reference, @RequestBody Produit p) {
         // exple: http://localhost:3000/update?reference=2&designation=xxxx&prix=9000 =>
