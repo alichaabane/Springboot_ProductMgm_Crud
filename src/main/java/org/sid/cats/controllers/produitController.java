@@ -1,8 +1,8 @@
 package org.sid.cats.controllers;
 
 import io.swagger.annotations.*;
-import org.sid.cats.repositories.IProduitRepository;
 import org.sid.cats.entites.Produit;
+import org.sid.cats.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,15 +14,15 @@ import java.util.List;
 
 @Api(value = "Product Management", description = "REST APIs related to Product Entity", tags = "Product Management")
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+//@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping(value = "/api/")
 
 public class produitController {
-    private final IProduitRepository produitRepository;
+    private final ProductRepository productRepository;
 
     @Autowired
-    public produitController(IProduitRepository produitRepository) {
-        this.produitRepository = produitRepository;
+    public produitController(ProductRepository productRepository) {
+        this.productRepository = productRepository;
     }
 
     @ApiOperation(value = "Save a product", response = Iterable.class, tags = "00 - Save Product")
@@ -35,7 +35,7 @@ public class produitController {
     @PostMapping("save")
     public Produit saveProduit(@RequestBody Produit p) {
 
-        return produitRepository.save(p);
+        return productRepository.save(p);
     }
 
     @ApiOperation(value = "Get all the products", response = Iterable.class, tags = "01 - Get all products")
@@ -47,7 +47,7 @@ public class produitController {
             @ApiResponse(code = 500, message = "Internal Server Error !") })
     @GetMapping("all")
     public List<Produit> getProduit() {
-        return produitRepository.findAll(sortByReferenceAsc());
+        return productRepository.findAll(sortByReferenceAsc());
     }
 
     private Sort sortByReferenceAsc() {
@@ -65,7 +65,7 @@ public class produitController {
     public Page<Produit> getProduits(int page) {
         Sort sort = Sort.by("designation");
         Pageable pageable = PageRequest.of(page, 5, sort);
-        return produitRepository.findAll(pageable);
+        return productRepository.findAll(pageable);
     }
 
     @ApiOperation(value = "Get products by keyword", response = Iterable.class, tags = "03 - Get products by keyword")
@@ -83,7 +83,7 @@ public class produitController {
         Sort sort = Sort.by("reference");
         Pageable pageable = PageRequest.of(page, 5, sort);
 
-        return produitRepository.produitParMC("%" + mc + "%", pageable);
+        return productRepository.productParMC("%" + mc + "%", pageable);
     }
 
     @ApiOperation(value = "Get a product by reference", response = Iterable.class, tags = "04 - Get a product")
@@ -97,7 +97,7 @@ public class produitController {
     public Produit getProduit(@PathVariable("reference") long reference) {
         System.out.println(reference);
         // exple: http://localhost:3000/get?ref=1 => retourne produit de reference (id) = 1
-        return produitRepository.findById(reference).orElse(null);
+        return productRepository.findById(reference).orElse(null);
     }
 
     @ApiOperation(value = "Delete a product", response = Iterable.class, tags = "05 - Delete a product")
@@ -111,7 +111,7 @@ public class produitController {
     public boolean delete(@PathVariable("reference") long reference) {
         // exple: http://localhost:3000/delete?reference=1 => supprime le produit de reference (id) = 1
         // et retourne true si il n'ya pas d'erreur durant la suppression
-        produitRepository.deleteById(reference);
+        productRepository.deleteById(reference);
         return true;
     }
 
@@ -127,7 +127,7 @@ public class produitController {
     public Produit update(@PathVariable("reference") long reference, @RequestBody Produit p) {
         // exple: http://localhost:3000/update?reference=2&designation=xxxx&prix=9000 =>
         // changer le produit par le designation XXXX et prix = 9000 de reference (id) = 2
-        return produitRepository.save(p);
+        return productRepository.save(p);
     }
 
 }
