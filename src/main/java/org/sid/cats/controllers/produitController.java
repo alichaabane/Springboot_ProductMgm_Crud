@@ -78,7 +78,7 @@ public class produitController {
     @GetMapping("produitsParMC")
     public Page<Produit> getProduits(String mc, int page) {
         // exple: http://localhost:3000/produitsParMC?mc=TV&page=0
-        // => retourne la/ les produit(s) (max 5 par page) de mot clé contenant TV dans la premiere page
+        // => retourner la/ les produit(s) (max 5 par page) de mot clé contenant TV dans la premiere page
 
         Sort sort = Sort.by("reference");
         Pageable pageable = PageRequest.of(page, 5, sort);
@@ -96,7 +96,7 @@ public class produitController {
     @GetMapping("getProduit/{reference}")
     public Produit getProduit(@PathVariable("reference") long reference) {
         System.out.println(reference);
-        // exple: http://localhost:3000/get?ref=1 => retourne produit de reference (id) = 1
+        // exple: http://localhost:3000/get?ref=1 => retourner produit de reference (id) = 1
         return productRepository.findById(reference).orElse(null);
     }
 
@@ -107,9 +107,9 @@ public class produitController {
             @ApiResponse(code = 403, message = "Forbidden !"),
             @ApiResponse(code = 404, message = "Not Found !") ,
             @ApiResponse(code = 500, message = "Internal Server Error !") })
-    @DeleteMapping("delete")
+    @DeleteMapping("delete/{reference}")
     public boolean delete(@PathVariable("reference") long reference) {
-        // exple: http://localhost:3000/delete?reference=1 => supprime le produit de reference (id) = 1
+        // exple: http://localhost:3000/delete?reference=1 => supprimer le produit de reference (id) = 1
         // et retourne true si il n'ya pas d'erreur durant la suppression
         productRepository.deleteById(reference);
         return true;
