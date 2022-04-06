@@ -56,12 +56,15 @@ public class ProductServiceImpl implements ProductService {
         SearchResponse<ProductDto> response = new SearchResponse<>();
         response.setData(productPage.getContent().stream().map(this::mapProductToProductDto).collect(Collectors.toList()));
         response.setTotalRecords(productPage.getTotalElements());
+        System.out.println(response);
         return response;
     }
 
+    //TODO  Pagination
+
     @Override
     public SearchResponse<ProductDto> getProductsByKeywordAndPage(String keyword, int page) {
-        Sort sort = Sort.by("reference");
+        Sort sort = Sort.by("designation");
         Pageable pageable = PageRequest.of(page, 5, sort);
         Page<Product> productPage = productRepository.productParMC("%" + keyword + "%", pageable);
 
@@ -76,11 +79,12 @@ public class ProductServiceImpl implements ProductService {
         return this.mapProductToProductDto(this.productRepository.findById(reference).orElseThrow(IllegalArgumentException::new));
     }
 
+    //TODO Update Product
     @Override
     public ProductDto updateProduct(long reference, ProductDto p) {
         Product product = new Product();
         if (p.getReference() != null) {
-            product = productRepository.findById(reference).orElseThrow(IllegalArgumentException::new);
+            product = productRepository.findById(p.getReference()).orElseThrow(IllegalArgumentException::new);
         }
         product = productRepository.save(product);
         return mapProductToProductDto(product);

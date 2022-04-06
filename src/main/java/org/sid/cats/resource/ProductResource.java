@@ -3,27 +3,22 @@ package org.sid.cats.resource;
 import io.swagger.annotations.*;
 import org.sid.cats.dto.ProductDto;
 import org.sid.cats.dto.SearchResponse;
-import org.sid.cats.entity.Product;
-import org.sid.cats.repository.ProductRepository;
 import org.sid.cats.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Api(value = "Product Management", description = "REST APIs related to Product Entity", tags = "Product Management")
 @RestController
-//@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping(value = "/api/")
 
 public class ProductResource {
 
     private final ProductService productService;
 
+    @Autowired
     public ProductResource(
             ProductService productService
     ) {
