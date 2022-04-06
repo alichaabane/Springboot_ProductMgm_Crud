@@ -1,10 +1,7 @@
-package org.sid.cats.entites;
+package org.sid.cats.entity;
 
 import lombok.*;
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import java.io.Serializable;
 
 @Getter
 @Setter
@@ -12,7 +9,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @ToString
 @Entity
-public class Produit {
+public class Product {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long reference;
