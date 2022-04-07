@@ -60,7 +60,6 @@ public class ProductServiceImpl implements ProductService {
         return response;
     }
 
-    //TODO  Pagination
 
     @Override
     public SearchResponse<ProductDto> getProductsByKeywordAndPage(String keyword, int page) {
@@ -70,6 +69,7 @@ public class ProductServiceImpl implements ProductService {
 
         SearchResponse<ProductDto> response = new SearchResponse<>();
         response.setData(productPage.getContent().stream().map(this::mapProductToProductDto).collect(Collectors.toList()));
+        response.setTotalPages(productPage.getTotalPages());
         response.setTotalRecords(productPage.getTotalElements());
         return response;
     }
@@ -79,14 +79,15 @@ public class ProductServiceImpl implements ProductService {
         return this.mapProductToProductDto(this.productRepository.findById(reference).orElseThrow(IllegalArgumentException::new));
     }
 
-    //TODO Update Product
     @Override
     public ProductDto updateProduct(long reference, ProductDto p) {
         Product product = new Product();
+
         if (p.getReference() != null) {
-            product = productRepository.findById(p.getReference()).orElseThrow(IllegalArgumentException::new);
+            product = mapProductDtoToProduct(p);
         }
         product = productRepository.save(product);
+
         return mapProductToProductDto(product);
     }
 

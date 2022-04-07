@@ -56,7 +56,7 @@ public class ProductResource {
             @ApiResponse(code = 404, message = "Not Found !") ,
             @ApiResponse(code = 500, message = "Internal Server Error !") })
     @GetMapping("produits")
-    public SearchResponse<ProductDto> getProduits(int page) {
+    public SearchResponse<ProductDto> getProducts(int page) {
         return this.productService.getProductsByPage(page);
     }
 
@@ -68,7 +68,7 @@ public class ProductResource {
             @ApiResponse(code = 404, message = "Not Found !") ,
             @ApiResponse(code = 500, message = "Internal Server Error !") })
     @GetMapping("produitsParMC")
-    public  SearchResponse<ProductDto> getProduits(String mc, int page) {
+    public  SearchResponse<ProductDto> getProductsByKeyWordAndPage(String mc, int page) {
         // exple: http://localhost:3000/produitsParMC?mc=TV&page=0
         // => retourner la/ les produit(s) (max 5 par page) de mot clé contenant TV dans la premiere page
         return this.productService.getProductsByKeywordAndPage(mc, page);
@@ -83,7 +83,7 @@ public class ProductResource {
             @ApiResponse(code = 404, message = "Not Found !") ,
             @ApiResponse(code = 500, message = "Internal Server Error !") })
     @GetMapping("getProduit/{reference}")
-    public ProductDto getProduit(@PathVariable("reference") long reference) {
+    public ProductDto getProduct(@PathVariable("reference") long reference) {
         System.out.println(reference);
         // exple: http://localhost:3000/get?ref=1 => retourner produit de reference (id) = 1
         return this.productService.getProduct(reference);
